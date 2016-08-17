@@ -6,10 +6,12 @@ import android.graphics.Canvas;
 import android.graphics.Matrix;
 import android.graphics.Point;
 import android.graphics.PointF;
+import android.graphics.Rect;
 import android.util.AttributeSet;
+import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
-import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 
 
@@ -63,6 +65,21 @@ public class ImageConvert extends ImageView{
      */
     private Matrix currentMatrix = new Matrix();
 
+    /**
+     * 图片的左上角坐标
+     */
+    private PointF leftPointF;
+
+    /**
+     * 图片的右下角坐标
+     */
+    private PointF rightPointF;
+
+    /**
+     * 当前的 matrix 值
+     */
+    float[] values=new float[9];
+
     public ImageConvert(Context context) {
         super(context, null);
     }
@@ -85,17 +102,19 @@ public class ImageConvert extends ImageView{
         }else{
             // 画出变换后的图像
             canvas.drawBitmap(source, matrix, null);
+            matrix.getValues(values);
         }
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         switch (event.getAction() & MotionEvent.ACTION_MASK){
+
             case MotionEvent.ACTION_MOVE:
                 if(current_status == MODE_DRAG){
+                    matrix.set(currentMatrix);
                     float dx = event.getX() - startPoint.x;
                     float dy = event.getY() - startPoint.y;
-                    matrix.set(currentMatrix);
                     matrix.postTranslate(dx, dy);
                     Log.e("移动","x = " + dx + " y = " + dy);
                 }else if(current_status == MODE_ZOOM){
@@ -105,9 +124,9 @@ public class ImageConvert extends ImageView{
                     Log.e("放大倍数",scale + "倍");
                     matrix.set(currentMatrix);
                     matrix.postScale(scale,scale,midPoint.x,midPoint.y);
+                    //checkMinimum();
                 }
                 invalidate();
-
                 break;
 
             case MotionEvent.ACTION_DOWN:
@@ -124,14 +143,72 @@ public class ImageConvert extends ImageView{
 
             case MotionEvent.ACTION_UP:
             case MotionEvent.ACTION_POINTER_UP:
+
+                checkOutBounds();
+
                 current_status = -1;
+                invalidate();
                 break;
         }
         return super.onTouchEvent(event);
     }
 
+    /**
+     * 检查图片移动时候的越界情况
+     */
+    private void checkOutBounds(){
+        leftPointF = getLeftPointF();
+        rightPointF = getRightPointF();
+        //缩小
+        if(values[Matrix.MSCALE_X] < 1f){
+            if(leftPointF.x < 0){
+                matrix.postTranslate(-leftPointF.x, 0);
+            }
+            if(leftPointF.y < 0){
+                matrix.postTranslate(0, -leftPointF.y);
+            }
+            if(rightPointF.x > this.getWidth()){
+                matrix.postTranslate(this.getWidth() - rightPointF.x, 0);
+            }
+            if(rightPointF.y > this.getHeight()){
+                matrix.postTranslate(0, this.getHeight()-rightPointF.y);
+            }
+        }else{
+            if(leftPointF.x > 0){
+                matrix.postTranslate(-leftPointF.x, 0);
+            }
+            if(leftPointF.y > 0){
+                matrix.postTranslate(0, -leftPointF.y);
+            }
+            if(rightPointF.x < this.getWidth()){
+                matrix.postTranslate(this.getWidth() - rightPointF.x, 0);
+            }
+            if(rightPointF.y < this.getHeight()){
+                matrix.postTranslate(0, this.getHeight()-rightPointF.y);
+            }
+        }
+    }
+
+    /**
+     * 判断图片的缩小是否小于原图
+     */
+    private void checkMinimum(){
+        matrix.getValues(values);
+        //防止缩放图片比原图片更小
+        if(values[Matrix.MSCALE_X] < 1f){
+            matrix.reset();
+        }
+    }
+
+    /**
+     * 设置图片资源
+     *
+     * @param bitmap
+     */
     public void setBitmap(Bitmap bitmap){
         source = bitmap;
+
+        source = resizeBitmap(bitmap);
     }
 
     /**
@@ -156,5 +233,60 @@ public class ImageConvert extends ImageView{
         float midX = (event.getX(1) + event.getX(0)) / 2;
         float midY = (event.getY(1) + event.getY(0)) / 2;
         return new PointF(midX, midY);
+    }
+
+    /**
+     * 改变图片的初始大小
+     *
+     * @param bitmap
+     * @return
+     */
+    public Bitmap resizeBitmap(Bitmap bitmap)
+    {
+        int width = bitmap.getWidth();
+        int height = bitmap.getHeight();
+        //获取屏幕长宽
+        WindowManager manager = (WindowManager) getContext().getSystemService(
+                Context.WINDOW_SERVICE);
+        DisplayMetrics outMetrics = new DisplayMetrics();
+        manager.getDefaultDisplay().getMetrics(outMetrics);
+        //计算充满屏幕需要缩放的倍数
+        float scaleWight = ((float)outMetrics.widthPixels)/width;
+        float scaleHeight = ((float)outMetrics.heightPixels)/height;
+        //等比例缩放
+        Matrix matrix = new Matrix();
+        float scale = scaleWight > scaleHeight ? scaleHeight:scaleWight;
+        matrix.postScale(scale, scale);
+
+        Bitmap res = Bitmap.createBitmap(bitmap, 0,0,width, height, matrix, true);
+        return res;
+    }
+
+    /**
+     * 获取图片左上角坐标
+     *
+     * @return
+     */
+    private PointF getLeftPointF()
+    {
+        float[] values = new float[9];
+        matrix.getValues(values);
+        float leftX=values[2];
+        float leftY=values[5];
+        return new PointF(leftX,leftY);
+    }
+
+    /**
+     * 获取图片右下角坐标
+     *
+     * @return
+     */
+    private PointF getRightPointF()
+    {
+        float[] values = new float[9];
+        matrix.getValues(values);
+        float leftX= values[2]+  source.getWidth()*values[0];
+        float leftY=values[5]+ source.getHeight()*values[4];
+        return new PointF(leftX,leftY);
     }
 }
