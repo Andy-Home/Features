@@ -18,7 +18,7 @@ import android.widget.ImageView;
 /**
  * Created by Administrator on 2016/7/29 0029.
  */
-public class ImageConvert extends ImageView{
+public class PhotoConvert extends ImageView {
     /**
      * 图片放大
      */
@@ -80,15 +80,15 @@ public class ImageConvert extends ImageView{
      */
     float[] values=new float[9];
 
-    public ImageConvert(Context context) {
+    public PhotoConvert(Context context) {
         super(context, null);
     }
 
-    public ImageConvert(Context context, AttributeSet attrs) {
+    public PhotoConvert(Context context, AttributeSet attrs) {
         super(context, attrs, 0);
     }
 
-    public ImageConvert(Context context, AttributeSet attrs, int defStyleAttr) {
+    public PhotoConvert(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
 

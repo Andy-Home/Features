@@ -16,7 +16,7 @@
             </intent-filter>
         </activity>
 
-        <activity android:name="com.andy.activity.ImageActivity"/>
+        <activity android:name="com.andy.activity.ImageScale" />
     </application>
 
 </manifest>

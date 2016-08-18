@@ -35,7 +35,10 @@ public class MainActivity extends AppCompatActivity implements FeaturesAdapter.O
 
     private void getData() {
         data.add("图片缩放移动");
-        mActivity.add(ImageActivity.class);
+        mActivity.add(ImageScale.class);
+
+        data.add("图片选择");
+        mActivity.add(ImageChoose.class);
     }
 
     private void initView() {

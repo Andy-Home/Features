@@ -4,7 +4,7 @@
     android:layout_gravity="center"
     android:layout_height="match_parent">
 
-    <com.andy.custom.ImageConvert
+    <com.andy.custom.PhotoConvert
         android:id="@+id/image_convert"
         android:layout_gravity="center"
         android:layout_width="match_parent"
