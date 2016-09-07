@@ -2,6 +2,12 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.andy.features">
 
+    <uses-permission android:name="android.permission.MOUNT_UNMOUNT_FILESYSTEMS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -17,6 +23,17 @@
         </activity>
 
         <activity android:name="com.andy.activity.ImageScale" />
+
+        <activity android:name="com.andy.activity.ImageChoose" />
+
+        <activity android:name="com.andy.activity.Camera" />
+
+        <activity
+            android:name="com.andy.activity.CameraSelf"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity android:name="com.andy.activity.VoiceAnim" />
     </application>
 
 </manifest>

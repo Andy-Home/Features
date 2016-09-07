@@ -39,6 +39,12 @@ public class MainActivity extends AppCompatActivity implements FeaturesAdapter.O
 
         data.add("图片选择");
         mActivity.add(ImageChoose.class);
+
+        data.add("自定义相机");
+        mActivity.add(Camera.class);
+
+        data.add("录音动画");
+        mActivity.add(VoiceAnim.class);
     }
 
     private void initView() {
