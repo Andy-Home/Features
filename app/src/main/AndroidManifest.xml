@@ -29,7 +29,12 @@
         <activity android:name="com.andy.activity.Camera" />
 
         <activity
-            android:name="com.andy.activity.CameraSelf"
+            android:name="com.andy.activity.CameraSelf1"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
+
+        <activity
+            android:name="com.andy.activity.CameraSelf2"
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.NoTitleBar.Fullscreen" />
 

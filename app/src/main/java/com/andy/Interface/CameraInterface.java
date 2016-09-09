@@ -14,6 +14,7 @@ import com.andy.util.CamParaUtil;
 import com.andy.util.FileUtil;
 import com.andy.util.ImageUtil;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
@@ -27,9 +28,12 @@ public class CameraInterface {
     private boolean isPreviewing = false;
     private float mPreviwRate = -1f;
     private static CameraInterface mCameraInterface;
+    private CamOpenOverCallback callback;
 
     public interface CamOpenOverCallback {
-        public void cameraHasOpened();
+        void cameraHasOpened();
+
+        void photoDisplay(String path);
     }
 
     private CameraInterface() {
@@ -49,6 +53,7 @@ public class CameraInterface {
      * @param callback
      */
     public void doOpenCamera(CamOpenOverCallback callback) {
+        this.callback = callback;
         Log.i(TAG, "Camera open....");
         mCamera = Camera.open();
         Log.i(TAG, "Camera open over....");
@@ -62,6 +67,7 @@ public class CameraInterface {
      * @param previewRate
      */
     public void doStartPreview(SurfaceHolder holder, float previewRate) {
+        Log.i(TAG, "preViewRate = " + previewRate);
         Log.i(TAG, "doStartPreview...");
         if (isPreviewing) {
             mCamera.stopPreview();
@@ -94,7 +100,6 @@ public class CameraInterface {
                 mCamera.setPreviewDisplay(holder);
                 mCamera.startPreview();//开启预览
             } catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
 
@@ -171,9 +176,11 @@ public class CameraInterface {
                 float baseWidth = rotaBitmap.getWidth() / 6;
                 float baseHight = (int) (baseWidth * 4 * 1.58f) / 2;
 
-                System.out.println("图片宽度 = " + rotaBitmap.getWidth() + " 图片高度 = " + rotaBitmap.getHeight());
+                System.out.println("截图前图片宽度 = " + rotaBitmap.getWidth() + " 图片高度 = " + rotaBitmap.getHeight());
                 Bitmap bitmap = Bitmap.createBitmap(rotaBitmap, (int) (rotaBitmap.getWidth() / 2 - baseWidth * 2), (int) (rotaBitmap.getHeight() / 2 - baseHight), (int) baseWidth * 4, (int) baseHight * 2);
-                FileUtil.saveBitmap(bitmap);
+                System.out.println("截图后图片宽度 = " + bitmap.getWidth() + " 图片高度 = " + bitmap.getHeight());
+                String path = FileUtil.saveBitmap(bitmap);
+                callback.photoDisplay(path);
             }
             //再次进入预览
             mCamera.startPreview();

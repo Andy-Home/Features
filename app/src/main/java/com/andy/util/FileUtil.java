@@ -39,7 +39,7 @@ public class FileUtil {
      *
      * @param b
      */
-    public static void saveBitmap(Bitmap b) {
+    public static String saveBitmap(Bitmap b) {
 
         String path = initPath();
         long dataTake = System.currentTimeMillis();
@@ -57,6 +57,7 @@ public class FileUtil {
             Log.i(TAG, "saveBitmap:失败");
             e.printStackTrace();
         }
+        return jpegName;
     }
 }
 

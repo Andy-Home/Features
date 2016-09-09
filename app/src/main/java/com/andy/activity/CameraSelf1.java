@@ -1,13 +1,19 @@
 package com.andy.activity;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Point;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.view.LayoutInflater;
 import android.view.SurfaceHolder;
 import android.view.View;
 import android.widget.Button;
 import android.view.ViewGroup.LayoutParams;
+import android.widget.ImageView;
 
 import com.andy.Interface.CameraInterface;
 import com.andy.features.R;
@@ -17,7 +23,7 @@ import com.andy.view.CameraSurfaceView;
 /**
  * Created by Administrator on 2016/9/7 0007.
  */
-public class CameraSelf extends Activity implements CameraInterface.CamOpenOverCallback {
+public class CameraSelf1 extends Activity implements CameraInterface.CamOpenOverCallback {
     private static final String TAG = "yanzi";
     CameraSurfaceView surfaceView = null;
     Button shutterBtn;
@@ -29,8 +35,7 @@ public class CameraSelf extends Activity implements CameraInterface.CamOpenOverC
         Thread openThread = new Thread() {
             @Override
             public void run() {
-                // TODO Auto-generated method stub
-                CameraInterface.getInstance().doOpenCamera(CameraSelf.this);
+                CameraInterface.getInstance().doOpenCamera(CameraSelf1.this);
             }
         };
         openThread.start();
@@ -52,20 +57,23 @@ public class CameraSelf extends Activity implements CameraInterface.CamOpenOverC
         params.height = p.y;
         previewRate = DisplayUtil.getScreenRate(this); //默认全屏的比例预览
         surfaceView.setLayoutParams(params);
-
-        //手动设置拍照ImageButton的大小为120dip×120dip,原图片大小是64×64
-        LayoutParams p2 = shutterBtn.getLayoutParams();
-        p2.width = DisplayUtil.dip2px(this, 80);
-        p2.height = DisplayUtil.dip2px(this, 80);
-        ;
-        shutterBtn.setLayoutParams(p2);
-
     }
 
     @Override
     public void cameraHasOpened() {
         SurfaceHolder holder = surfaceView.getSurfaceHolder();
         CameraInterface.getInstance().doStartPreview(holder, previewRate);
+    }
+
+    @Override
+    public void photoDisplay(String path) {
+        Dialog dialog = new Dialog(this);
+        dialog.setContentView(R.layout.dialog_image);
+        ;
+        ImageView imageView = (ImageView) dialog.findViewById(R.id.image);
+        Bitmap bitmap = BitmapFactory.decodeFile(path);
+        imageView.setImageBitmap(bitmap);
+        dialog.show();
     }
 
     private class BtnListeners implements View.OnClickListener {
