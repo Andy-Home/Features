@@ -108,9 +108,9 @@ public class CameraInterface {
 
             mParams = mCamera.getParameters(); //重新get一次
             Log.i(TAG, "最终设置:PreviewSize--With = " + mParams.getPreviewSize().width
-                    + "Height = " + mParams.getPreviewSize().height);
+                    + " Height = " + mParams.getPreviewSize().height);
             Log.i(TAG, "最终设置:PictureSize--With = " + mParams.getPictureSize().width
-                    + "Height = " + mParams.getPictureSize().height);
+                    + " Height = " + mParams.getPictureSize().height);
         }
     }
 

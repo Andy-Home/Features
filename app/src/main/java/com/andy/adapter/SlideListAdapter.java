@@ -58,7 +58,6 @@ public class SlideListAdapter extends BaseAdapter {
             @Override
             public void onClick(View view) {
                 Toast.makeText(context, "删除第 " + i + " 项", Toast.LENGTH_SHORT).show();
-                ;
             }
         });
         return view;

@@ -35,6 +35,11 @@ public class CameraSelf1 extends Activity implements CameraInterface.CamOpenOver
         Thread openThread = new Thread() {
             @Override
             public void run() {
+                try {
+                    Thread.sleep(60);       //延时60ms，解决某些机型预览黑屏的问题
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 CameraInterface.getInstance().doOpenCamera(CameraSelf1.this);
             }
         };

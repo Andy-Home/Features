@@ -16,10 +16,6 @@ public class CamParaUtil {
     private CameraSizeComparator sizeComparator = new CameraSizeComparator();
     private static CamParaUtil myCamPara = null;
 
-    private CamParaUtil() {
-
-    }
-
     public static CamParaUtil getInstance() {
         if (myCamPara == null) {
             myCamPara = new CamParaUtil();
@@ -65,7 +61,7 @@ public class CamParaUtil {
 
     public boolean equalRate(Size s, float rate) {
         float r = (float) (s.width) / (float) (s.height);
-        if (Math.abs(r - rate) <= 0.03) {
+        if (Math.abs(r - rate) <= 0.01) {
             return true;
         } else {
             return false;
@@ -74,7 +70,6 @@ public class CamParaUtil {
 
     public class CameraSizeComparator implements Comparator<Camera.Size> {
         public int compare(Size lhs, Size rhs) {
-            // TODO Auto-generated method stub
             if (lhs.width == rhs.width) {
                 return 0;
             } else if (lhs.width > rhs.width) {

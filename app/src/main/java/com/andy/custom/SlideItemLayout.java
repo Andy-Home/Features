@@ -65,7 +65,6 @@ public class SlideItemLayout extends ViewGroup {
         int size = getChildCount();
         //获取删除按钮的宽度
         deleteWidth = getChildAt(size - 1).getMeasuredWidth();
-
         for (int i = 0; i < size; i++) {
             View view = getChildAt(i);
 
@@ -117,6 +116,12 @@ public class SlideItemLayout extends ViewGroup {
                 releaseVelocityTracker();
                 break;
             case MotionEvent.ACTION_CANCEL:
+                endX = event.getX();
+                if (startX - endX < deleteWidth / 2) {
+                    scrollTo(0, 0);
+                } else {
+                    scrollTo((int) deleteWidth, 0);
+                }
                 releaseVelocityTracker();
                 break;
         }
@@ -152,5 +157,12 @@ public class SlideItemLayout extends ViewGroup {
             mVelocityTracker.recycle();
             mVelocityTracker = null;
         }
+    }
+
+    /**
+     * 返回到初始状态
+     */
+    private void reset() {
+        scrollTo(0, 0);
     }
 }
