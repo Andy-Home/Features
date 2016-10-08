@@ -49,6 +49,8 @@ public class Camera extends AppCompatActivity implements View.OnClickListener {
                 startActivity(intent1);
                 break;
             case R.id.camera3:
+                Intent intent2 = new Intent(this, CameraSelf2.class);
+                startActivity(intent2);
                 break;
             default:
         }

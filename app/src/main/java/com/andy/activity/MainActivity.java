@@ -45,6 +45,12 @@ public class MainActivity extends AppCompatActivity implements FeaturesAdapter.O
 
         data.add("录音动画");
         mActivity.add(VoiceAnim.class);
+
+        data.add("绘画");
+        mActivity.add(Picture.class);
+
+        data.add("滑动删除");
+        mActivity.add(SlideListActivity.class);
     }
 
     private void initView() {
