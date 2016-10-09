@@ -162,7 +162,7 @@ public class SlideItemLayout extends ViewGroup {
     /**
      * 返回到初始状态
      */
-    private void reset() {
+    public void reset() {
         scrollTo(0, 0);
     }
 }

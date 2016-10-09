@@ -8,6 +8,7 @@ import android.widget.BaseAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.andy.custom.SlideItemLayout;
 import com.andy.features.R;
 
 import java.util.List;
@@ -20,6 +21,7 @@ public class SlideListAdapter extends BaseAdapter {
 
     private Context context;
     private List<String> datas;
+    private onItemDeleteListener listener;
 
     public SlideListAdapter(Context context, List<String> strings) {
         this.context = context;
@@ -43,10 +45,11 @@ public class SlideListAdapter extends BaseAdapter {
 
     @Override
     public View getView(final int i, View view, ViewGroup viewGroup) {
-        ViewHolder viewHolder;
+        final ViewHolder viewHolder;
         if (view == null) {
             viewHolder = new ViewHolder();
             view = LayoutInflater.from(context).inflate(R.layout.item_slide_list, viewGroup, false);
+            viewHolder.layout = (SlideItemLayout) view.findViewById(R.id.layout);
             viewHolder.name = (TextView) view.findViewById(R.id.name);
             viewHolder.delete = (TextView) view.findViewById(R.id.delete);
             view.setTag(viewHolder);
@@ -57,14 +60,24 @@ public class SlideListAdapter extends BaseAdapter {
         viewHolder.delete.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(context, "删除第 " + i + " 项", Toast.LENGTH_SHORT).show();
+                viewHolder.layout.reset();
+                listener.onItemDelete(i);
             }
         });
         return view;
     }
 
     class ViewHolder {
+        public SlideItemLayout layout;
         public TextView name;
         public TextView delete;
+    }
+
+    public interface onItemDeleteListener {
+        void onItemDelete(int position);
+    }
+
+    public void setOnItemDeleteListener(onItemDeleteListener listener) {
+        this.listener = listener;
     }
 }

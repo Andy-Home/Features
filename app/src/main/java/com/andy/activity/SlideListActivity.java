@@ -5,6 +5,7 @@ import android.os.Bundle;
 import android.widget.ListView;
 
 import com.andy.adapter.SlideListAdapter;
+import com.andy.custom.SlideListView;
 import com.andy.features.R;
 
 import java.util.ArrayList;
@@ -16,7 +17,7 @@ import java.util.List;
 
 public class SlideListActivity extends Activity {
     private List<String> datas = new ArrayList<>();
-    private ListView list;
+    private SlideListView list;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,15 @@ public class SlideListActivity extends Activity {
     }
 
     private void setAdapter() {
-        list = (ListView) findViewById(R.id.list);
-        list.setAdapter(new SlideListAdapter(this, datas));
+        list = (SlideListView) findViewById(R.id.list);
+        final SlideListAdapter listAdapter = new SlideListAdapter(this, datas);
+        list.setAdapter(listAdapter);
+        listAdapter.setOnItemDeleteListener(new SlideListAdapter.onItemDeleteListener() {
+            @Override
+            public void onItemDelete(int position) {
+                datas.remove(position);
+                listAdapter.notifyDataSetChanged();
+            }
+        });
     }
 }

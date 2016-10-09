@@ -1,11 +1,16 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
+    android:scrollbars="none"
     android:layout_height="match_parent">
 
-    <ListView
+    <com.andy.custom.SlideListView
         android:id="@+id/list"
+        android:dividerHeight="10dp"
+        android:scrollbars="none"
+        android:layout_margin="10dp"
+        android:divider="@color/white"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="wrap_content" />
 
-</RelativeLayout>
+</ScrollView>
