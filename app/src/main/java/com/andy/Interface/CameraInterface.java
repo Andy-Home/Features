@@ -142,7 +142,6 @@ public class CameraInterface {
             //快门按下的回调，在这里我们可以设置类似播放“咔嚓”声之类的操作。默认的就是咔嚓。
     {
         public void onShutter() {
-            // TODO Auto-generated method stub
             Log.i(TAG, "myShutterCallback:onShutter...");
         }
     };
@@ -151,7 +150,6 @@ public class CameraInterface {
     {
 
         public void onPictureTaken(byte[] data, Camera camera) {
-            // TODO Auto-generated method stub
             Log.i(TAG, "myRawCallback:onPictureTaken...");
 
         }
@@ -160,7 +158,6 @@ public class CameraInterface {
             //对jpeg图像数据的回调,最重要的一个回调
     {
         public void onPictureTaken(byte[] data, Camera camera) {
-            // TODO Auto-generated method stub
             Log.i(TAG, "myJpegCallback:onPictureTaken...");
             Bitmap b = null;
             if (null != data) {

@@ -53,7 +53,6 @@ public class FileUtil {
             bos.close();
             Log.i(TAG, "saveBitmap成功");
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             Log.i(TAG, "saveBitmap:失败");
             e.printStackTrace();
         }
