@@ -11,14 +11,17 @@ import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 
 
 /**
+ * 图片操作，包含图片移动、缩放、旋转
+ *
  * Created by Administrator on 2016/7/29 0029.
  */
-public class PhotoConvert extends ImageView {
+public class PhotoConvert extends View {
     /**
      * 图片放大
      */
@@ -42,8 +45,8 @@ public class PhotoConvert extends ImageView {
     /**
      * 缩放的两个值，用来计算两者之间的比例值
      */
-    private double startDis;
-    private double endDis;
+    private float startDis;
+    private float endDis;
 
     /**
      * 缩放的中点
@@ -124,7 +127,7 @@ public class PhotoConvert extends ImageView {
                     Log.e("放大倍数",scale + "倍");
                     matrix.set(currentMatrix);
                     matrix.postScale(scale,scale,midPoint.x,midPoint.y);
-                    //checkMinimum();
+                    checkMinimum();
                 }
                 invalidate();
                 break;
@@ -142,10 +145,11 @@ public class PhotoConvert extends ImageView {
                 break;
 
             case MotionEvent.ACTION_UP:
-            case MotionEvent.ACTION_POINTER_UP:
-
                 checkOutBounds();
-
+                current_status = -1;
+                invalidate();
+                break;
+            case MotionEvent.ACTION_POINTER_UP:
                 current_status = -1;
                 invalidate();
                 break;
@@ -217,10 +221,10 @@ public class PhotoConvert extends ImageView {
      * @param event
      * @return
      */
-    private double distance(MotionEvent event){
+    private float distance(MotionEvent event){
         float dx = event.getX(1) - event.getX(0);
         float dy = event.getY(1) - event.getY(0);
-        return Math.sqrt( dx * dx + dy * dy);
+        return (float) Math.sqrt( dx * dx + dy * dy);
     }
 
     /**
@@ -236,10 +240,10 @@ public class PhotoConvert extends ImageView {
     }
 
     /**
-     * 改变图片的初始大小
+     * 重新测量图片大小，等比例缩放图片至占满整个View
      *
-     * @param bitmap
-     * @return
+     * @param bitmap    需要重绘的图片
+     * @return  重绘后的图片
      */
     public Bitmap resizeBitmap(Bitmap bitmap)
     {
@@ -258,14 +262,13 @@ public class PhotoConvert extends ImageView {
         float scale = scaleWight > scaleHeight ? scaleHeight:scaleWight;
         matrix.postScale(scale, scale);
 
-        Bitmap res = Bitmap.createBitmap(bitmap, 0,0,width, height, matrix, true);
-        return res;
+        return Bitmap.createBitmap(bitmap, 0,0,width, height, matrix, true);
     }
 
     /**
      * 获取图片左上角坐标
      *
-     * @return
+     * @return  左上角坐标
      */
     private PointF getLeftPointF()
     {
@@ -279,7 +282,7 @@ public class PhotoConvert extends ImageView {
     /**
      * 获取图片右下角坐标
      *
-     * @return
+     * @return  右下角坐标
      */
     private PointF getRightPointF()
     {
